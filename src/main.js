@@ -16,6 +16,8 @@ class Main {
     window.addEventListener("resize", function() {
       this.engine.resize();
     });
+
+    this.importLight();
   }
 
   _createScene() {
@@ -42,17 +44,17 @@ class Main {
     );
     var light2 = new BABYLON.PointLight(
       "light2",
-      new BABYLON.Vector3(0, 1, -1),
-      scene
-    );
-
-    // Add and manipulate meshes in the scene
-    var sphere = BABYLON.MeshBuilder.CreateSphere(
-      "sphere",
-      { diameter: 2 },
+      new BABYLON.Vector3(0, 0, 1),
       scene
     );
 
     return scene;
+  }
+
+  importLight() {
+    BABYLON.OBJFileLoader.OPTIMIZE_WITH_UV = true;
+    BABYLON.SceneLoader.Append("./src/assets/", "lampe.obj", this.scene, () => {
+      console.log("Mesh Loaded");
+    });
   }
 }
