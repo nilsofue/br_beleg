@@ -5,7 +5,7 @@ class Main {
   }
 
   init() {
-    var scene = this._createScene(); //Call the createScene function
+    var scene = this.createScene(); //Call the createScene function
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(function() {
@@ -17,10 +17,11 @@ class Main {
       this.engine.resize();
     });
 
-    this.importLight();
+    this.importFlashLight();
+    this.createGround();
   }
 
-  _createScene() {
+  createScene() {
     // Create the scene space
     var scene = new BABYLON.Scene(this.engine);
 
@@ -51,10 +52,25 @@ class Main {
     return scene;
   }
 
-  importLight() {
+  importFlashLight() {
     BABYLON.OBJFileLoader.OPTIMIZE_WITH_UV = true;
-    BABYLON.SceneLoader.Append("./src/assets/", "lampe.obj", this.scene, () => {
-      console.log("Mesh Loaded");
-    });
+    BABYLON.SceneLoader.Append(
+      "./src/assets/",
+      "lampe.obj",
+      this.scene,
+      flashlight => {
+        console.log("Flashlight Loaded");
+        console.log(flashlight);
+        flashlight.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
+      }
+    );
+  }
+
+  createGround() {
+    var myGround = BABYLON.MeshBuilder.CreateGround(
+      "myGround",
+      { width: 10, height: 10, subdivisions: 10 },
+      this.scene
+    );
   }
 }
