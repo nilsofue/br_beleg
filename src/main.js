@@ -4,6 +4,7 @@ class Main {
     this.engine = new BABYLON.Engine(this.canvas, true); // Generate the BABYLON 3D engine
     this.scene = this.createScene();
     this.inputMap = {};
+    this.flashlightSource = null;
   }
 
   init() {
@@ -21,7 +22,9 @@ class Main {
     });
 
     this.importFlashLight();
+    this.flashlightSource = this.createFlashlightSource();
     this.createGround();
+    this.createWalls();
     this.initKeyEventRegistration();
   }
 
@@ -33,25 +36,22 @@ class Main {
     var camera = new BABYLON.ArcRotateCamera(
       "Camera",
       Math.PI / 2,
-      Math.PI / 2,
+      Math.PI / 3,
       2,
-      new BABYLON.Vector3(0, 0, 5),
+      new BABYLON.Vector3(0, 20, 25),
       scene
     );
 
     camera.attachControl(this.canvas, true);
 
     // Add lights to the scene
-    var light1 = new BABYLON.HemisphericLight(
-      "light1",
-      new BABYLON.Vector3(1, 1, 0),
+    var light1 = new BABYLON.PointLight(
+      "DirectionalLight",
+      new BABYLON.Vector3(0, 20, 0),
       scene
     );
-    var light2 = new BABYLON.PointLight(
-      "light2",
-      new BABYLON.Vector3(0, 0, 1),
-      scene
-    );
+
+    light1.intensity = 0.5;
 
     return scene;
   }
@@ -71,6 +71,7 @@ class Main {
           scalingFactor,
           scalingFactor
         );
+        flashlight[1].position.z = 7;
         that.scene.onBeforeRenderObservable.add(() => {
           that.controlFlashlight(flashlight[1]);
         });
@@ -81,9 +82,53 @@ class Main {
   createGround() {
     var myGround = BABYLON.MeshBuilder.CreateGround(
       "myGround",
-      { width: 10, height: 10, subdivisions: 10 },
+      { width: 30, height: 20 },
       this.scene
     );
+  }
+
+  createFlashlightSource() {
+    var flashlightSource = new BABYLON.SpotLight(
+      "light2",
+      new BABYLON.Vector3(0, 0, 0),
+      new BABYLON.Vector3(0, 0, -1),
+      Math.PI / 3,
+      3,
+      this.scene
+    );
+
+    flashlightSource.position.z = 5.5;
+    flashlightSource.position.y = 0.9;
+
+    return flashlightSource;
+  }
+
+  createWalls() {
+    var frontWall = BABYLON.MeshBuilder.CreatePlane(
+      "myPlane",
+      { width: 30, height: 20, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
+      this.scene
+    );
+    frontWall.position.z = -10;
+    frontWall.position.y = 10;
+
+    var leftWall = BABYLON.MeshBuilder.CreatePlane(
+      "myPlane",
+      { width: 20, height: 20, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
+      this.scene
+    );
+    leftWall.rotate(BABYLON.Axis.Y, -Math.PI / 2, BABYLON.Space.WORLD);
+    leftWall.position.y = 10;
+    leftWall.position.x = 15;
+
+    var rightWall = BABYLON.MeshBuilder.CreatePlane(
+      "myPlane",
+      { width: 20, height: 20, sideOrientation: BABYLON.Mesh.DOUBLESIDE },
+      this.scene
+    );
+    rightWall.rotate(BABYLON.Axis.Y, Math.PI / 2, BABYLON.Space.WORLD);
+    rightWall.position.y = 10;
+    rightWall.position.x = -15;
   }
 
   initKeyEventRegistration() {
@@ -113,15 +158,19 @@ class Main {
   controlFlashlight(flashlight) {
     if (this.inputMap["w"] || this.inputMap["ArrowUp"]) {
       flashlight.position.z -= 0.1;
+      this.flashlightSource.position.z -= 0.1;
     }
     if (this.inputMap["a"] || this.inputMap["ArrowLeft"]) {
       flashlight.position.x += 0.1;
+      this.flashlightSource.position.x += 0.1;
     }
     if (this.inputMap["s"] || this.inputMap["ArrowDown"]) {
       flashlight.position.z += 0.1;
+      this.flashlightSource.position.z += 0.1;
     }
     if (this.inputMap["d"] || this.inputMap["ArrowRight"]) {
       flashlight.position.x -= 0.1;
+      this.flashlightSource.position.x -= 0.1;
     }
   }
 }
