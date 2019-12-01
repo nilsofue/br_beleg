@@ -2,14 +2,16 @@ class Main {
   constructor(canvas) {
     this.canvas = canvas; // Get the canvas element
     this.engine = new BABYLON.Engine(this.canvas, true); // Generate the BABYLON 3D engine
+    this.scene = this.createScene();
   }
 
   init() {
-    var scene = this.createScene(); //Call the createScene function
+    var that = this;
+    //var scene = this.createScene(); //Call the createScene function
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(function() {
-      scene.render();
+      that.scene.render();
     });
 
     // Watch for browser/canvas resize events
@@ -53,15 +55,17 @@ class Main {
   }
 
   importFlashLight() {
-    BABYLON.OBJFileLoader.OPTIMIZE_WITH_UV = true;
-    BABYLON.SceneLoader.Append(
+    var that = this;
+    BABYLON.OBJFileLoader.SKIP_MATERIALS = true;
+    BABYLON.SceneLoader.ImportMesh(
+      "",
       "./src/assets/",
       "lampe.obj",
       this.scene,
       flashlight => {
-        console.log("Flashlight Loaded");
-        console.log(flashlight);
-        flashlight.scaling = new BABYLON.Vector3(0.1, 0.1, 0.1);
+        that.scene.onBeforeRenderObservable.add(() => {
+          that.controlFlashlight(flashlight[1]);
+        });
       }
     );
   }
@@ -72,5 +76,9 @@ class Main {
       { width: 10, height: 10, subdivisions: 10 },
       this.scene
     );
+  }
+
+  controlFlashlight(flashlight) {
+    flashlight.position.x += 0.001;
   }
 }
