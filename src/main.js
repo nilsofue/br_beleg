@@ -3,6 +3,7 @@ class Main {
     this.canvas = canvas; // Get the canvas element
     this.engine = new BABYLON.Engine(this.canvas, true); // Generate the BABYLON 3D engine
     this.scene = this.createScene();
+    this.inputMap = {};
   }
 
   init() {
@@ -21,6 +22,7 @@ class Main {
 
     this.importFlashLight();
     this.createGround();
+    this.initKeyEventRegistration();
   }
 
   createScene() {
@@ -63,6 +65,12 @@ class Main {
       "lampe.obj",
       this.scene,
       flashlight => {
+        var scalingFactor = 0.2;
+        flashlight[1].scaling = new BABYLON.Vector3(
+          scalingFactor,
+          scalingFactor,
+          scalingFactor
+        );
         that.scene.onBeforeRenderObservable.add(() => {
           that.controlFlashlight(flashlight[1]);
         });
@@ -78,7 +86,42 @@ class Main {
     );
   }
 
+  initKeyEventRegistration() {
+    var that = this;
+    this.scene.actionManager = new BABYLON.ActionManager(this.scene);
+    this.scene.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnKeyDownTrigger,
+        function(evt) {
+          that.inputMap[evt.sourceEvent.key] =
+            evt.sourceEvent.type == "keydown";
+        }
+      )
+    );
+    this.scene.actionManager.registerAction(
+      new BABYLON.ExecuteCodeAction(
+        BABYLON.ActionManager.OnKeyUpTrigger,
+        function(evt) {
+          that.inputMap[evt.sourceEvent.key] =
+            evt.sourceEvent.type == "keydown";
+        }
+      )
+    );
+  }
+
+  // Renderloop flashlight
   controlFlashlight(flashlight) {
-    flashlight.position.x += 0.001;
+    if (this.inputMap["w"] || this.inputMap["ArrowUp"]) {
+      flashlight.position.z -= 0.1;
+    }
+    if (this.inputMap["a"] || this.inputMap["ArrowLeft"]) {
+      flashlight.position.x += 0.1;
+    }
+    if (this.inputMap["s"] || this.inputMap["ArrowDown"]) {
+      flashlight.position.z += 0.1;
+    }
+    if (this.inputMap["d"] || this.inputMap["ArrowRight"]) {
+      flashlight.position.x -= 0.1;
+    }
   }
 }
