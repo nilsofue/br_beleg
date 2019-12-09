@@ -1,5 +1,5 @@
 class Main {
-  constructor(canvas) {
+  constructor(canvas, fps) {
     this.canvas = canvas; // Get the canvas element
     this.engine = new BABYLON.Engine(this.canvas, true); // Generate the BABYLON 3D engine
     this.scene = this.createScene();
@@ -8,6 +8,7 @@ class Main {
     this.flashlightSource = null;
     this.flashlight = null;
     this.ball = null;
+    this.fps = fps;
   }
 
   init() {
@@ -17,6 +18,18 @@ class Main {
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(function() {
       that.scene.render();
+
+      that.fps.innerHTML = that.engine.getFps().toFixed() + " fps";
+
+      that.shadowGenerator.blurKernel = document.getElementById(
+        "shadowBlurSlider"
+      ).value;
+
+      that.shadowGenerator._mapSize = document.getElementById(
+        "shadowMapSizeSlider"
+      ).value;
+
+      that.shadowGenerator.recreateShadowMap();
     });
 
     // Watch for browser/canvas resize events
@@ -128,6 +141,7 @@ class Main {
       1024,
       this.flashlightSource
     );
+    console.log(this.shadowGenerator.getShadowMap());
     this.shadowGenerator.useBlurExponentialShadowMap = true;
     this.shadowGenerator.useKernelBlur = true;
     this.shadowGenerator.blurKernel = 64;
