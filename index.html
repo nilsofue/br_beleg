@@ -47,28 +47,50 @@
       height="600px"
     ></canvas>
     <div id="fps">0</div>
-    <div class="slidecontainer">
-      Blur shadow
-      <input
-        type="range"
-        min="1"
-        max="100"
-        value="50"
-        class="slider"
-        id="shadowBlurSlider"
-      />
-    </div>
-    <div class="slidecontainer">
-      Shadow map size
-      <input
-        type="range"
-        min="8"
-        max="1024"
-        value="8"
-        class="slider"
-        id="shadowMapSizeSlider"
-      />
-    </div>
+    <table>
+      <tr><td><h5>Light</h5></td></tr>
+      <td class="descriptionClass">Light Intensity</td>
+        <td class="sliderClass">
+          <input
+            type="range"
+            min="0"
+            max="1"
+            value="1"
+            class="slider"
+            id="lightIntenseSlider"
+          />
+        </td class="sliderClass">
+        <td class="parameterClass" id="lightIntenseSliderParam">0</td class="parameterClass">
+      <tr><td><h5>Shadow</h5></td></tr>
+      <tr>
+        <td class="descriptionClass">Blur shadow</td>
+        <td class="sliderClass">
+          <input
+            type="range"
+            min="1"
+            max="100"
+            value="50"
+            class="slider"
+            id="shadowBlurSlider"
+          />
+        </td class="sliderClass">
+        <td class="parameterClass" id="shadowBlurSliderParam">0</td class="parameterClass">
+      </tr>
+      <tr>
+        <td class="descriptionClass">Shadow map size</td>
+        <td class="sliderClass">
+          <input
+            type="range"
+            min="8"
+            max="1024"
+            value="512"
+            class="slider"
+            id="shadowMapSizeSlider"
+          />
+        </td>
+        <td class="parameterClass" id="shadowMapSizeSliderParam">0</td>
+      </tr>
+    </table>
   </body>
   <script>
     let run = new Main(

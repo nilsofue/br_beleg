@@ -21,13 +21,33 @@ class Main {
 
       that.fps.innerHTML = that.engine.getFps().toFixed() + " fps";
 
-      that.shadowGenerator.blurKernel = document.getElementById(
-        "shadowBlurSlider"
-      ).value;
+      let shadowBlurSliderValue = document.getElementById("shadowBlurSlider")
+        .value;
 
-      that.shadowGenerator._mapSize = document.getElementById(
+      let shadowMapSizeSliderValue = document.getElementById(
         "shadowMapSizeSlider"
       ).value;
+
+      that.shadowGenerator.blurKernel = shadowBlurSliderValue;
+      document.getElementById(
+        "shadowBlurSliderParam"
+      ).innerHTML = shadowBlurSliderValue;
+
+      document.getElementById(
+        "shadowMapSizeSliderParam"
+      ).innerHTML = shadowMapSizeSliderValue;
+
+      that.shadowGenerator._mapSize = shadowMapSizeSliderValue;
+
+      let lightIntenseSliderValue = document.getElementById(
+        "lightIntenseSlider"
+      ).value;
+
+      document.getElementById(
+        "lightIntenseSliderParam"
+      ).innerHTML = lightIntenseSliderValue;
+
+      that.flashlightSource.setEnabled(lightIntenseSliderValue == 1);
 
       that.shadowGenerator.recreateShadowMap();
     });
@@ -117,7 +137,7 @@ class Main {
             scalingFactor
           );
           that.ball = b;
-          b.position.z = 7;
+          b.position.z = 2;
           b.position.y = 0.5;
           that.scene.onBeforeRenderObservable.add(() => {
             that.controlBall(b);
@@ -237,9 +257,17 @@ class Main {
     }
     if (this.inputMap["q"]) {
       flashlight.rotation.y -= 0.1;
+      this.flashlightSource.direction.x += 0.1;
+      if (flashlight.rotation.y < -1.3) flashlight.rotation.y = -1.3;
+      if (this.flashlightSource.direction.x > 1.3)
+        this.flashlightSource.direction.x = 1.3;
     }
     if (this.inputMap["e"]) {
       flashlight.rotation.y += 0.1;
+      this.flashlightSource.direction.x -= 0.1;
+      if (flashlight.rotation.y > 1.3) flashlight.rotation.y = 1.3;
+      if (this.flashlightSource.direction.x < -1.3)
+        this.flashlightSource.direction.x = -1.3;
     }
   }
 

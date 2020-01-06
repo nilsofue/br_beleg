@@ -10,3 +10,20 @@
   width: 60px;
   height: 27px;
 }
+
+.descriptionClass {
+  width: 150px;
+}
+
+.parameterClass {
+  width: 50px;
+  text-align: center;
+}
+
+.sliderClass {
+  width: 200px;
+}
+
+.sliderClass input {
+  width: 100%;
+}
