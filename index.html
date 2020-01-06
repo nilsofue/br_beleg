@@ -47,50 +47,97 @@
       height="600px"
     ></canvas>
     <div id="fps">0</div>
-    <table>
-      <tr><td><h5>Light</h5></td></tr>
-      <td class="descriptionClass">Light Intensity</td>
-        <td class="sliderClass">
-          <input
-            type="range"
-            min="0"
-            max="1"
-            value="1"
-            class="slider"
-            id="lightIntenseSlider"
-          />
-        </td class="sliderClass">
-        <td class="parameterClass" id="lightIntenseSliderParam">0</td class="parameterClass">
-      <tr><td><h5>Shadow</h5></td></tr>
-      <tr>
-        <td class="descriptionClass">Blur shadow</td>
-        <td class="sliderClass">
-          <input
-            type="range"
-            min="1"
-            max="100"
-            value="50"
-            class="slider"
-            id="shadowBlurSlider"
-          />
-        </td class="sliderClass">
-        <td class="parameterClass" id="shadowBlurSliderParam">0</td class="parameterClass">
-      </tr>
-      <tr>
-        <td class="descriptionClass">Shadow map size</td>
-        <td class="sliderClass">
-          <input
-            type="range"
-            min="8"
-            max="1024"
-            value="512"
-            class="slider"
-            id="shadowMapSizeSlider"
-          />
-        </td>
-        <td class="parameterClass" id="shadowMapSizeSliderParam">0</td>
-      </tr>
-    </table>
+    <div class="settingContainer">
+      <div class="lightSettingContainer">
+        <table>
+          <tr><td><h5>Light</h5></td></tr>
+          <tr>
+            <td class="descriptionClass">Power</td>
+            <td class="checkboxClass"><input type="checkbox" name="powerSwitch" id="powerSwitch" checked></td>
+            <td class="parameterClass" id="powerSwitchParam">On</tdclass="parameterClass" id="lightIntenseSliderParam">
+          </tr>
+          <tr>
+            <td class="descriptionClass">Light intensity</td>
+          <td class="sliderClass">
+              <input
+                type="range"
+                min="0"
+                max="20"
+                value="1"
+                step="0.01"
+                class="slider"
+                id="lightIntenseSlider"
+              />
+            </td>
+            <td class="parameterClass" id="lightIntenseSliderParam">0</td class="parameterClass">
+          </tr>
+          <tr>
+            <td class="descriptionClass">Light range</td>
+          <td class="sliderClass">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value="50"
+                class="slider"
+                id="lightRangeSlider"
+              />
+            </td>
+            <td class="parameterClass" id="lightRangeSliderParam">0</td class="parameterClass">
+          </tr>
+          <tr>
+            <td class="descriptionClass">Light angle</td>
+          <td class="sliderClass">
+              <input
+                type="range"
+                min="0"
+                max="3.14159265359"
+                value="0.78539816339"
+                step="0.01"
+                class="slider"
+                id="lightAngleSlider"
+              />
+            </td>
+            <td class="parameterClass" id="lightAngleSliderParam">0°</td class="parameterClass">
+          </tr>
+        </table>
+      </div>
+      <div class="shadowSettingContainer">
+        <table>
+          <tr><td><h5>Shadow</h5></td></tr>
+          <tr>
+            <td class="descriptionClass">Blur shadow</td>
+            <td class="sliderClass">
+              <input
+                type="range"
+                min="1"
+                max="100"
+                value="50"
+                class="slider"
+                id="shadowBlurSlider"
+              />
+            </td class="sliderClass">
+            <td class="parameterClass" id="shadowBlurSliderParam">0</td class="parameterClass">
+          </tr>
+          <tr>
+            <td class="descriptionClass">Shadow map size</td>
+            <td class="sliderClass">
+              <input
+                type="range"
+                min="8"
+                max="1024"
+                value="512"
+                class="slider"
+                id="shadowMapSizeSlider"
+              />
+            </td>
+            <td class="parameterClass" id="shadowMapSizeSliderParam">0</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    
+    
   </body>
   <script>
     let run = new Main(

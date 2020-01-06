@@ -12,7 +12,7 @@
 }
 
 .descriptionClass {
-  width: 150px;
+  width: 140px;
 }
 
 .parameterClass {
@@ -26,4 +26,16 @@
 
 .sliderClass input {
   width: 100%;
+}
+
+.checkboxClass {
+  text-align: center;
+}
+
+.lightSettingContainer {
+  margin-right: 30px;
+}
+
+.settingContainer {
+  display: flex;
 }

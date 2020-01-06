@@ -21,7 +21,7 @@ class Main {
 
     // Watch for browser/canvas resize events
     window.addEventListener("resize", function() {
-      this.engine.resize();
+      that.engine.resize();
     });
 
     this.importFlashLight();
@@ -37,7 +37,10 @@ class Main {
     this.scene.render();
 
     this.fps.innerHTML = this.engine.getFps().toFixed() + " fps";
+    this.handleSliders();
+  }
 
+  handleSliders() {
     let shadowBlurSliderValue = document.getElementById("shadowBlurSlider")
       .value;
 
@@ -63,7 +66,29 @@ class Main {
       "lightIntenseSliderParam"
     ).innerHTML = lightIntenseSliderValue;
 
-    this.flashlightSource.setEnabled(lightIntenseSliderValue == 1);
+    this.flashlightSource.intensity = lightIntenseSliderValue;
+
+    let powerCheckBox = document.getElementById("powerSwitch");
+
+    this.flashlightSource.setEnabled(powerCheckBox.checked);
+    document.getElementById(
+      "powerSwitchParam"
+    ).innerHTML = powerCheckBox.checked ? "On" : "Off";
+
+    let lightRangeSliderValue = document.getElementById("lightRangeSlider")
+      .value;
+
+    this.flashlightSource.range = lightRangeSliderValue;
+    document.getElementById(
+      "lightRangeSliderParam"
+    ).innerHTML = lightRangeSliderValue;
+
+    let lightAngleSliderValue = document.getElementById("lightAngleSlider")
+      .value;
+
+    this.flashlightSource.angle = lightAngleSliderValue;
+    document.getElementById("lightAngleSliderParam").innerHTML =
+      Math.round(lightAngleSliderValue * (180 / Math.PI)) + "°";
 
     this.shadowGenerator.recreateShadowMap();
   }
