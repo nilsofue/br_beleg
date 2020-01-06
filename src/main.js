@@ -13,43 +13,10 @@ class Main {
 
   init() {
     var that = this;
-    //var scene = this.createScene(); //Call the createScene function
 
     // Register a render loop to repeatedly render the scene
     this.engine.runRenderLoop(function() {
-      that.scene.render();
-
-      that.fps.innerHTML = that.engine.getFps().toFixed() + " fps";
-
-      let shadowBlurSliderValue = document.getElementById("shadowBlurSlider")
-        .value;
-
-      let shadowMapSizeSliderValue = document.getElementById(
-        "shadowMapSizeSlider"
-      ).value;
-
-      that.shadowGenerator.blurKernel = shadowBlurSliderValue;
-      document.getElementById(
-        "shadowBlurSliderParam"
-      ).innerHTML = shadowBlurSliderValue;
-
-      document.getElementById(
-        "shadowMapSizeSliderParam"
-      ).innerHTML = shadowMapSizeSliderValue;
-
-      that.shadowGenerator._mapSize = shadowMapSizeSliderValue;
-
-      let lightIntenseSliderValue = document.getElementById(
-        "lightIntenseSlider"
-      ).value;
-
-      document.getElementById(
-        "lightIntenseSliderParam"
-      ).innerHTML = lightIntenseSliderValue;
-
-      that.flashlightSource.setEnabled(lightIntenseSliderValue == 1);
-
-      that.shadowGenerator.recreateShadowMap();
+      that.renderLoop();
     });
 
     // Watch for browser/canvas resize events
@@ -64,9 +31,41 @@ class Main {
     this.createGround();
     this.createWalls();
     this.initKeyEventRegistration();
+  }
 
-    //var localOrigin = this.localAxes(2);
-    //localOrigin.parent = this.flashlight;
+  renderLoop() {
+    this.scene.render();
+
+    this.fps.innerHTML = this.engine.getFps().toFixed() + " fps";
+
+    let shadowBlurSliderValue = document.getElementById("shadowBlurSlider")
+      .value;
+
+    this.shadowGenerator.blurKernel = shadowBlurSliderValue;
+    document.getElementById(
+      "shadowBlurSliderParam"
+    ).innerHTML = shadowBlurSliderValue;
+
+    let shadowMapSizeSliderValue = document.getElementById(
+      "shadowMapSizeSlider"
+    ).value;
+
+    document.getElementById(
+      "shadowMapSizeSliderParam"
+    ).innerHTML = shadowMapSizeSliderValue;
+
+    this.shadowGenerator._mapSize = shadowMapSizeSliderValue;
+
+    let lightIntenseSliderValue = document.getElementById("lightIntenseSlider")
+      .value;
+
+    document.getElementById(
+      "lightIntenseSliderParam"
+    ).innerHTML = lightIntenseSliderValue;
+
+    this.flashlightSource.setEnabled(lightIntenseSliderValue == 1);
+
+    this.shadowGenerator.recreateShadowMap();
   }
 
   createScene() {
