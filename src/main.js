@@ -9,6 +9,8 @@ class Main {
     this.flashlight = null;
     this.ball = null;
     this.fps = fps;
+    this.lightOffset = { x: 0, y: 0, z: 0.0 };
+    this.randomBallsAmount = 50;
   }
 
   init() {
@@ -31,6 +33,7 @@ class Main {
     this.createGround();
     this.createWalls();
     this.initKeyEventRegistration();
+    this.createBalls();
   }
 
   renderLoop() {
@@ -119,6 +122,34 @@ class Main {
     return scene;
   }
 
+  createBalls() {
+    for (var i = 0; i < this.randomBallsAmount; i++) {
+      let size = Math.random();
+      let ball = BABYLON.MeshBuilder.CreateSphere(
+        "sphere",
+        {
+          diameterX: size,
+          diameterY: size,
+          diameterZ: size
+        },
+        this.scene
+      );
+      ball.position.x = Math.floor(Math.random() * Math.floor(31)) - 15;
+      ball.position.y = Math.floor(Math.random() * Math.floor(21));
+      ball.position.z = Math.floor(Math.random() * Math.floor(21)) - 10;
+
+      var greenMat = new BABYLON.StandardMaterial("greenMat", this.scene);
+      greenMat.diffuseColor = new BABYLON.Color3(
+        Math.random(),
+        Math.random(),
+        Math.random()
+      );
+      ball.material = greenMat;
+
+      this.shadowGenerator.getShadowMap().renderList.push(ball);
+    }
+  }
+
   importFlashLight() {
     var that = this;
     //BABYLON.OBJFileLoader.SKIP_MATERIALS = true;
@@ -201,7 +232,7 @@ class Main {
       this.scene
     );
 
-    flashlightSource.position.z = 6.5;
+    flashlightSource.position.z = 7 - this.lightOffset.z;
     flashlightSource.position.y = 0.9;
 
     return flashlightSource;
@@ -264,20 +295,37 @@ class Main {
   // Renderloop flashlight
   controlFlashlight(flashlight) {
     if (this.inputMap["w"]) {
-      flashlight.position.z -= 0.1;
-      this.flashlightSource.position.z -= 0.1;
+      if (this.flashlightSource.position.z < -9.5) {
+        this.flashlightSource.position.z = -9.5;
+        flashlight.position.z = -9.5 + this.lightOffset.z;
+      } else {
+        flashlight.position.z -= 0.1;
+        this.flashlightSource.position.z -= 0.1;
+      }
     }
     if (this.inputMap["a"]) {
       flashlight.position.x += 0.1;
       this.flashlightSource.position.x += 0.1;
+      if (this.flashlightSource.position.x > 14) {
+        this.flashlightSource.position.x = 14;
+        flashlight.position.x = 14;
+      }
     }
     if (this.inputMap["s"]) {
       flashlight.position.z += 0.1;
       this.flashlightSource.position.z += 0.1;
+      if (this.flashlightSource.position.z > 9.5) {
+        this.flashlightSource.position.z = 9.5;
+        flashlight.position.z = 9.5 + this.lightOffset.z;
+      }
     }
     if (this.inputMap["d"]) {
       flashlight.position.x -= 0.1;
       this.flashlightSource.position.x -= 0.1;
+      if (this.flashlightSource.position.x < -14) {
+        this.flashlightSource.position.x = -14;
+        flashlight.position.x = -14;
+      }
     }
     if (this.inputMap["q"]) {
       flashlight.rotation.y -= 0.1;
@@ -299,19 +347,35 @@ class Main {
   controlBall(ball) {
     if (this.inputMap["ArrowUp"]) {
       ball.position.z -= 0.1;
-      ball.rotation.x -= 0.1;
+      if (ball.position.z < -9.5) {
+        ball.position.z = -9.5;
+      } else {
+        ball.rotation.x -= 0.1;
+      }
     }
     if (this.inputMap["ArrowLeft"]) {
-      ball.rotation.z -= 0.1;
       ball.position.x += 0.1;
+      if (ball.position.x > 14) {
+        ball.position.x = 14;
+      } else {
+        ball.rotation.z -= 0.1;
+      }
     }
     if (this.inputMap["ArrowDown"]) {
-      ball.rotation.x += 0.1;
       ball.position.z += 0.1;
+      if (ball.position.z > 9.5) {
+        ball.position.z = 9.5;
+      } else {
+        ball.rotation.x += 0.1;
+      }
     }
     if (this.inputMap["ArrowRight"]) {
-      ball.rotation.z += 0.1;
       ball.position.x -= 0.1;
+      if (ball.position.x < -14) {
+        ball.position.x = -14;
+      } else {
+        ball.rotation.z += 0.1;
+      }
     }
   }
 
