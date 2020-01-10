@@ -10,7 +10,8 @@ class Main {
     this.ball = null;
     this.fps = fps;
     this.lightOffset = { x: 0, y: 0, z: 0.0 };
-    this.randomBallsAmount = 50;
+    this.randomBallsAmount = 500;
+    this.ballIds = [];
   }
 
   init() {
@@ -41,6 +42,7 @@ class Main {
 
     this.fps.innerHTML = this.engine.getFps().toFixed() + " fps";
     this.handleSliders();
+    this.controlBalls();
   }
 
   handleSliders() {
@@ -125,8 +127,9 @@ class Main {
   createBalls() {
     for (var i = 0; i < this.randomBallsAmount; i++) {
       let size = Math.random();
+      let id = this.uuidv4();
       let ball = BABYLON.MeshBuilder.CreateSphere(
-        "sphere",
+        id,
         {
           diameterX: size,
           diameterY: size,
@@ -137,6 +140,7 @@ class Main {
       ball.position.x = Math.floor(Math.random() * Math.floor(31)) - 15;
       ball.position.y = Math.floor(Math.random() * Math.floor(21));
       ball.position.z = Math.floor(Math.random() * Math.floor(21)) - 10;
+      ball.directionKey = 1;
 
       var greenMat = new BABYLON.StandardMaterial("greenMat", this.scene);
       greenMat.diffuseColor = new BABYLON.Color3(
@@ -145,8 +149,29 @@ class Main {
         Math.random()
       );
       ball.material = greenMat;
+      this.ballIds.push(id);
 
       this.shadowGenerator.getShadowMap().renderList.push(ball);
+    }
+  }
+
+  controlBalls() {
+    for (let ballId of this.ballIds) {
+      let ball = this.scene.getMeshByName(ballId);
+      let pos = ball.position.y;
+      if (ball.directionKey == 1) {
+        //up
+        if (pos > 21) {
+          ball.directionKey = 0;
+        }
+        ball.position.y = pos + 0.1;
+      } else {
+        // down
+        if (pos < 1) {
+          ball.directionKey = 1;
+        }
+        ball.position.y = pos - 0.1;
+      }
     }
   }
 
@@ -431,5 +456,13 @@ class Main {
     pilot_local_axisZ.parent = local_origin;
 
     return local_origin;
+  }
+
+  uuidv4() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c == "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
   }
 }
