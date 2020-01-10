@@ -201,7 +201,7 @@ class Main {
       this.scene
     );
 
-    flashlightSource.position.z = 5.8;
+    flashlightSource.position.z = 6.5;
     flashlightSource.position.y = 0.9;
 
     return flashlightSource;
