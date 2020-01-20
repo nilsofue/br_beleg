@@ -12,6 +12,7 @@ class Main {
     this.lightOffset = { x: 0, y: 0, z: 0.0 };
     this.randomBallsAmount = 500;
     this.ballIds = [];
+    this.ballToggle = false;
   }
 
   init() {
@@ -34,7 +35,6 @@ class Main {
     this.createGround();
     this.createWalls();
     this.initKeyEventRegistration();
-    this.createBalls();
   }
 
   renderLoop() {
@@ -43,6 +43,24 @@ class Main {
     this.fps.innerHTML = this.engine.getFps().toFixed() + " fps";
     this.handleSliders();
     this.controlBalls();
+  }
+
+  toogleBalls() {
+    if (!this.ballToggle) {
+      if (!this.ballIds.length) this.createBalls();
+      console.log("fbl");
+      this.ballToggle = true;
+    } else {
+      this.removeBalls();
+      this.ballToggle = false;
+    }
+  }
+
+  removeBalls() {
+    for (let ballId of this.ballIds) {
+      this.scene.getNodeByName(ballId).dispose();
+    }
+    this.ballIds = [];
   }
 
   handleSliders() {
